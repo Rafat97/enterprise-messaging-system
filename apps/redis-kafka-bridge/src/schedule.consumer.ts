@@ -1,10 +1,7 @@
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bull';
-import {
-  SCHEDULED_QUEUE_NAME,
-  SCHEDULED_QUEUE_PROCESS_NAME,
-} from './constants';
+import { SCHEDULED_QUEUE_NAME, SCHEDULED_QUEUE_PROCESS_NAME } from '@fanout/envs';
 
 @Processor(SCHEDULED_QUEUE_NAME)
 export class ScheduleConsumer {
@@ -16,15 +13,11 @@ export class ScheduleConsumer {
 
   @Process()
   async schedule(job: Job<unknown>) {
-    this.logger.log(
-      `Schedule Consumer Process _default_ complete for job: ${job.id}`,
-    );
+    this.logger.log(`Schedule Consumer Process _default_ complete for job: ${job.id}`);
   }
 
   @Process(SCHEDULED_QUEUE_PROCESS_NAME)
   async transcode(job: Job<unknown>) {
-    this.logger.log(
-      `Schedule Consumer Process transcode complete for job: ${job.id}`,
-    );
+    this.logger.log(`Schedule Consumer Process transcode complete for job: ${job.id}`);
   }
 }

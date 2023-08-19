@@ -1,5 +1,5 @@
 {
-  "name": "redis-kafka-bridge",
+  "name": "@application/redis-kafka-bridge",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -25,6 +25,9 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^9.0.0",
+    "@fanout/envs": "workspace:*",
+    "@fanout/tsconfig": "workspace:*",
+    "@fanout/logger": "workspace:*",
     "@nestjs/platform-express": "^9.0.0",
     "bull": "^4.11.3",
     "reflect-metadata": "^0.1.13",

@@ -1,0 +1,17 @@
+FROM node:18
+
+ARG bootstrap_program=apps/rest-api/dist/main.js
+ENV BUILD_FILE=$bootstrap_program
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install -g pnpm
+COPY . .
+RUN pnpm install
+RUN pnpm build
+
+EXPOSE 3000
+
+CMD [ "sh", "-c", "node ${BUILD_FILE}" ]

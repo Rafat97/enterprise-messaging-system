@@ -1,0 +1,19 @@
+{
+  "name": "@fanout/envs",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsc",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fanout/tsconfig": "workspace:*",
+    "typescript": "^4.7.4"
+  }
+}

@@ -58,10 +58,12 @@ services:
   rest-api:
     restart: always
     build:
-      context: ./apps/rest-api
-      dockerfile: ./Dockerfile.PROD
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.PROD
     scale: 1
+    tty: true
     environment:
+      - BUILD_FILE=apps/rest-api/dist/main.js
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - APP_PORT=3000
@@ -78,9 +80,10 @@ services:
   redis-kafka-bridge:
     restart: always
     build:
-      context: ./apps/redis-kafka-bridge
-      dockerfile: ./Dockerfile.PROD
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.PROD
     environment:
+      - BUILD_FILE=apps/redis-kafka-bridge/dist/main.js
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - APP_PORT=3000
@@ -97,9 +100,10 @@ services:
   redis-kafka-bridge-failed:
     restart: always
     build:
-      context: ./apps/redis-kafka-bridge-failed
-      dockerfile: ./Dockerfile.PROD
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile.PROD
     environment:
+      - BUILD_FILE=apps/redis-kafka-bridge-failed/dist/main.js
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - APP_PORT=3000

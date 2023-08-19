@@ -7,9 +7,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('APP_PORT', 3000);
   await app.listen(port, '0.0.0.0', async () => {
-    console.log(
-      `redis-kafka-bridge Application started on port ${await app.getUrl()}`,
-    );
+    console.log(`redis-kafka-bridge Application started on port ${await app.getUrl()}`);
   });
 }
 bootstrap();

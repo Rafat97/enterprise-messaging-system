@@ -2,6 +2,6 @@
   "extends": "@fanout/tsconfig/nest-tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./"
   },
 }

@@ -1,5 +1,5 @@
 {
-  "name": "rest-api",
+  "name": "@application/rest-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -21,11 +21,15 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@fanout/envs": "workspace:*",
+    "@fanout/tsconfig": "workspace:*",
+    "@fanout/logger": "workspace:*",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^7.1.8",
     "bull": "^4.11.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

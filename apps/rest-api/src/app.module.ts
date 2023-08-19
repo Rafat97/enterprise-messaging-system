@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
-import { SCHEDULED_QUEUE_NAME } from './constants';
+import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
+import { RequestIdMiddleware } from './requestId.middleware';
 
 @Module({
   imports: [
@@ -23,6 +24,10 @@ import { SCHEDULED_QUEUE_NAME } from './constants';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Logger],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

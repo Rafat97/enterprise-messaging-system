@@ -2,10 +2,11 @@
   "name": "create-a-fanout-archi",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "nx run-many --target=dev --all",
+    "dev": "nx run-many --target=dev --all --verbose",
     "build": "nx run-many --target=build --all --verbose",
+    "format": "nx run-many --target=format --all --verbose",
     "prod": "nx run-many --target=start:prod --all --verbose",
     "docker:all": "docker-compose -f docker-compose-all.yml up -d --build",
     "docker:dependency": "docker-compose -f docker-compose-dependency.yml up -d --build"
@@ -14,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nx": "^16.6.0"
+    "nx": "16.7.2",
+    "prettier": "^2.3.2"
   }
 }
