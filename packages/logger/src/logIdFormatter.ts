@@ -11,7 +11,7 @@ export const customLogIdFormatter: FormatWrap = format((info) => {
     info.requestId = reqId;
   }
   info.logId = logId;
-  info.requestInfo = JSON.stringify({ url: req?.url, method: req?.method });
+  info.requestInfo = JSON.stringify({ url: req?.url, method: req?.method, body: req?.body, });
 
   return info;
 });

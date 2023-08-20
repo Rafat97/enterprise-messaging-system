@@ -1,11 +1,12 @@
-import { Logger, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
-import { RequestIdMiddleware } from './requestId.middleware';
+import { RequestIdMiddleware } from './common/middleware/requestId.middleware';
 import { LoggerIdMiddleware } from '@fanout/logger';
+import { MessagesModule } from './messages/messages.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -23,14 +24,14 @@ import { LoggerIdMiddleware } from '@fanout/logger';
     BullModule.registerQueue({
       name: SCHEDULED_QUEUE_NAME,
     }),
+    MessagesModule,
+    HealthModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService, Logger],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(RequestIdMiddleware, LoggerIdMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(RequestIdMiddleware, LoggerIdMiddleware).forRoutes('*');
   }
 }
