@@ -6,9 +6,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(@Headers() headers) {
-    console.log(headers);
-
+  getHello() {
     return this.appService.getHello();
   }
 

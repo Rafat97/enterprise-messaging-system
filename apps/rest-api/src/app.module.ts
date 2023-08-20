@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
 import { RequestIdMiddleware } from './requestId.middleware';
+import { LoggerIdMiddleware } from '@fanout/logger';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { RequestIdMiddleware } from './requestId.middleware';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestIdMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer
+      .apply(RequestIdMiddleware, LoggerIdMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
