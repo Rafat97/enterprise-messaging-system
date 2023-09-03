@@ -1,23 +1,48 @@
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { Job, Queue } from 'bull';
 import { SCHEDULED_QUEUE_NAME, SCHEDULED_QUEUE_PROCESS_NAME } from '@fanout/envs';
+import { SERVICE_NAME } from './constant';
+import { ClientKafka } from '@nestjs/microservices';
+
+interface IJobQueue {
+  message: { [x: string]: any };
+  eventName: string;
+  metaData: { [x: string]: any };
+}
+
+interface IScheduleConsumer {
+  bridgeScheduleSend(job: Job<IJobQueue>): Promise<void>;
+}
 
 @Processor(SCHEDULED_QUEUE_NAME)
-export class ScheduleConsumer {
+export class ScheduleConsumer implements IScheduleConsumer {
   private readonly logger = new Logger(ScheduleConsumer.name);
 
-  constructor(@InjectQueue(SCHEDULED_QUEUE_NAME) private scheduleQueue: Queue) {
+  constructor(
+    @InjectQueue(SCHEDULED_QUEUE_NAME) private readonly scheduleQueue: Queue,
+    @Inject(SERVICE_NAME) private readonly kafkaClient: ClientKafka,
+  ) {
     this.logger.log(`JOB RUN ON ${SCHEDULED_QUEUE_NAME}`);
   }
 
-  @Process()
-  async schedule(job: Job<unknown>) {
-    this.logger.log(`Schedule Consumer Process _default_ complete for job: ${job.id}`);
-  }
-
   @Process(SCHEDULED_QUEUE_PROCESS_NAME)
-  async transcode(job: Job<unknown>) {
-    this.logger.log(`Schedule Consumer Process transcode complete for job: ${job.id}`);
+  async bridgeScheduleSend(job: Job<IJobQueue>) {
+    this.logger.log(
+      `Schedule Consumer Process ${SCHEDULED_QUEUE_PROCESS_NAME} complete for job: ${job.id}`,
+    );
+    console.log(job.data);
+    // await this.kafkaClient.send(job.data.eventName, JSON.stringify(job.data.message));
+    // await this.kafkaClient.emit(job.data.eventName, JSON.stringify(job.data.message));
+    const producer = await this.kafkaClient.connect();
+    await producer.send({
+      topic: job.data.eventName,
+      messages: [
+        {
+          value: JSON.stringify(job.data.message),
+        },
+      ],
+    });
+    return;
   }
 }

@@ -5,6 +5,21 @@ networks:
   kafka-network:
 
 services:
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    restart: "always"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "bitnami-kafka-cluster-1"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    depends_on:
+      - kafka
+    networks:
+      - kafka-network
+
   kafka:
     restart: always
     image: docker.io/bitnami/kafka:3.5
@@ -15,6 +30,7 @@ services:
     volumes:
       - "kafka_data:/bitnami"
     environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
       # KRaft settings
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_CFG_NODE_ID=0

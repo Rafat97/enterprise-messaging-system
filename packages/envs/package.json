@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@fanout/tsconfig": "workspace:*",
-    "@types/node": "^16.0.0",
-    "typescript": "^4.7.4"
+    "@types/node": "^16.18.48",
+    "typescript": "^4.9.5"
   }
 }

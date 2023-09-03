@@ -6,6 +6,22 @@ networks:
   kafka-network:
 
 services:
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    restart: "always"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "bitnami-kafka-cluster-1"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    depends_on:
+      - kafka
+    networks:
+      - kafka-network
+
   kafka:
     restart: always
     image: docker.io/bitnami/kafka:3.5
@@ -16,6 +32,7 @@ services:
     volumes:
       - "kafka_data:/bitnami"
     environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
       # KRaft settings
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_CFG_NODE_ID=0
@@ -84,6 +101,7 @@ services:
       dockerfile: ./dockerfiles/Dockerfile.PROD
     environment:
       - BUILD_FILE=apps/redis-kafka-bridge/dist/main.js
+      - KAFKA_BROKERS=kafka:9092
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - APP_PORT=3000
@@ -97,13 +115,13 @@ services:
       - kafka-network
       - redis-network
 
-  redis-kafka-bridge-failed:
+  redis-queue-failed:
     restart: always
     build:
       context: .
       dockerfile: ./dockerfiles/Dockerfile.PROD
     environment:
-      - BUILD_FILE=apps/redis-kafka-bridge-failed/dist/main.js
+      - BUILD_FILE=apps/redis-queue-failed/dist/main.js
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - APP_PORT=3000

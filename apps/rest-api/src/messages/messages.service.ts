@@ -20,7 +20,6 @@ export class MessagesService {
     const uniqId = ulid();
     const requestId = headers?.[REQUEST_ID_HEADER] ?? 'NONE';
 
-    const data = createMessageDto.message ?? {};
     const jobId =
       `${createMessageDto.eventName}__` +
       (createMessageDto?.option?.jobId ?? `${requestId}__${uniqId}`);
@@ -30,6 +29,14 @@ export class MessagesService {
       delay: createMessageDto?.delay ?? 10,
       removeOnComplete: true,
       priority: createMessageDto?.option?.priority ?? 1,
+    };
+
+    const data = {
+      eventName: createMessageDto.eventName,
+      message: createMessageDto.message ?? {},
+      metaData: {
+        eventType: `delayed message queued, delay = ${options.delay}ms, priority = ${options.priority}`,
+      },
     };
 
     if (createMessageDto?.option?.jobId) {

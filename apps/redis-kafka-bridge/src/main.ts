@@ -5,7 +5,7 @@ import { CustomLoggerFactory } from '@fanout/logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: CustomLoggerFactory('rest-api'),
+    logger: CustomLoggerFactory('redis-kafka-bridge'),
   });
   const configService = app.get(ConfigService);
   const port = configService.get<number>('APP_PORT', 3000);

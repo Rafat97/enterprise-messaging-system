@@ -16,6 +16,6 @@
   "license": "ISC",
   "devDependencies": {
     "nx": "16.7.2",
-    "prettier": "^2.3.2"
+    "prettier": "^2.8.8"
   }
 }

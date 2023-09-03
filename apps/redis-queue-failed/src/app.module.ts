@@ -5,6 +5,7 @@ import { BullModule } from '@nestjs/bull';
 import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from './task.cron';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TasksService } from './task.cron';
       name: SCHEDULED_QUEUE_NAME,
     }),
     ScheduleModule.forRoot(),
+    HealthModule,
   ],
   controllers: [],
   providers: [AppService, TasksService],
