@@ -14,6 +14,7 @@ export class ProducerFactory {
       id: job.id,
       timestamp: Date.now(),
       eventName: job.data.eventName,
+      eventMetaData: job.data.metaData,
       data: job.data.message,
     };
     return sendDataValue;
