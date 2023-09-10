@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import {
+  SCHEDULED_FAILED_MAX_ITEM_ATTEMPT,
   SCHEDULED_FAILED_RETRY_CRON,
   SCHEDULED_FAILED_RETRY_CRON_MAXIMUM_JOB_RETRY_LENGTH,
   SCHEDULED_QUEUE_NAME,
@@ -20,6 +21,7 @@ export class TasksService {
     this.logger.log(
       `[${new Date(Date.now()).toUTCString()}] Failed job total size: ${jobs.length}`,
     );
+    jobs = jobs.filter((job) => job.attemptsMade <= SCHEDULED_FAILED_MAX_ITEM_ATTEMPT);
     if (jobs.length >= SCHEDULED_FAILED_RETRY_CRON_MAXIMUM_JOB_RETRY_LENGTH) {
       jobs = jobs.slice(0, SCHEDULED_FAILED_RETRY_CRON_MAXIMUM_JOB_RETRY_LENGTH);
     }
