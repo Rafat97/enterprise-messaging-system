@@ -9,10 +9,21 @@ import {
   ValidateNested,
   Min,
   Length,
+  IsEnum,
 } from 'class-validator';
 import { CreateMessageOptionsDto } from './create-message-option.dto';
 
+export enum DriverName {
+  KAFKA = 'kafka',
+}
+
 export class CreateDelayedMessageDto {
+  @ApiProperty({ description: 'Give the driver name', default: 'kafka' })
+  @IsNotEmpty()
+  @IsString()
+  @IsEnum(DriverName)
+  driverName: string;
+
   @ApiProperty({ description: 'Give event name' })
   @IsNotEmpty()
   @IsString()

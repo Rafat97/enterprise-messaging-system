@@ -1,37 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
 import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
 import { ScheduleConsumer } from './schedule.consumer';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAME } from './constant';
 import { HealthModule } from './health/health.module';
+import { KafkaDriver } from './driver/kafka/kafka.driver';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    ClientsModule.registerAsync([
-      {
-        name: SERVICE_NAME,
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => ({
-          transport: Transport.KAFKA,
-          options: {
-            client: {
-              clientId: 'producer1',
-              brokers: configService.get<string>('KAFKA_BROKERS').split(','),
-            },
-            producerOnlyMode: true,
-            consumer: {
-              groupId: SERVICE_NAME,
-              allowAutoTopicCreation: true,
-            },
-          },
-        }),
-      },
-    ]),
+
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -48,6 +26,6 @@ import { HealthModule } from './health/health.module';
     HealthModule,
   ],
   controllers: [],
-  providers: [AppService, ScheduleConsumer],
+  providers: [KafkaDriver, ScheduleConsumer],
 })
 export class AppModule {}

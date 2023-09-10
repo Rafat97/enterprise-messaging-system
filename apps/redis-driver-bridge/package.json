@@ -1,5 +1,5 @@
 {
-  "name": "@application/redis-kafka-bridge",
+  "name": "@application/redis-driver-bridge",
   "version": "0.0.1",
   "description": "",
   "author": "",

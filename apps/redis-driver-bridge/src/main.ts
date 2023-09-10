@@ -5,12 +5,12 @@ import { CustomLoggerFactory } from '@fanout/logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: CustomLoggerFactory('redis-kafka-bridge'),
+    logger: CustomLoggerFactory('redis-driver-bridge'),
   });
   const configService = app.get(ConfigService);
   const port = configService.get<number>('APP_PORT', 3000);
   await app.listen(port, '0.0.0.0', async () => {
-    console.log(`redis-kafka-bridge Application started on port ${await app.getUrl()}`);
+    console.log(`redis-driver-bridge Application started on port ${await app.getUrl()}`);
   });
 }
 bootstrap();

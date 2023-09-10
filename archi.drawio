@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="OOjGi8MfTCr8QfIq_Vkd" name="Page-1">
-        <mxGraphModel dx="1690" dy="1113" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1398" dy="547" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -8,9 +8,6 @@
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="80" y="223" as="sourcePoint"/>
                     </mxGeometry>
-                </mxCell>
-                <mxCell id="14" style="edgeStyle=none;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitX=0.992;exitY=0.649;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="2" target="4" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="19" style="edgeStyle=none;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.002;entryY=0.453;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="2" target="3" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -21,38 +18,33 @@
                 <mxCell id="12" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="3" target="10" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="3" target="21">
+                <mxCell id="22" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="1" source="3" target="21" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="414" y="65"/>
+                            <mxPoint x="379" y="60"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="3" value="redis" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="354" y="138" width="120" height="171" as="geometry"/>
-                </mxCell>
-                <mxCell id="9" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="4" target="8" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
+                    <mxGeometry x="319" y="133" width="120" height="171" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="Kafka" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="738" y="120" width="120" height="320" as="geometry"/>
+                    <mxGeometry x="780" y="70" width="120" height="79" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="kafka-consumer" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="949" y="240" width="120" height="80" as="geometry"/>
+                <mxCell id="23" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;" edge="1" parent="1" source="10" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" style="edgeStyle=none;html=1;entryX=0.015;entryY=0.329;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="10" target="4" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="690" y="220" as="targetPoint"/>
-                    </mxGeometry>
+                <mxCell id="25" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;" edge="1" parent="1" source="10" target="24">
+                    <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="redis-kafka-bridge" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="546" y="193.5" width="120" height="60" as="geometry"/>
+                <mxCell id="27" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;" edge="1" parent="1" source="10" target="26">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="redis-driver-bridge" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="511" y="188.5" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="15" value="Scheduled/delayed Queued&amp;nbsp;&lt;br&gt;messages" style="text;html=1;align=right;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="175" y="138" width="169" height="41" as="geometry"/>
-                </mxCell>
-                <mxCell id="16" value="Direct async messages" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="537" y="368" width="142" height="26" as="geometry"/>
+                    <mxGeometry x="140" y="133" width="169" height="41" as="geometry"/>
                 </mxCell>
                 <mxCell id="18" style="edgeStyle=none;html=1;" parent="1" source="17" target="2" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -60,11 +52,17 @@
                 <mxCell id="17" value="Nginx&lt;br&gt;(for load balancer)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="-350" y="275" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" value="Queued messages" style="text;html=1;align=right;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="225" y="217" width="119" height="26" as="geometry"/>
+                <mxCell id="20" value="Queued messages/without delayed&amp;nbsp;&lt;br&gt;message" style="text;html=1;align=right;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="103" y="211" width="209" height="41" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="redis-kafka-bridge-failed&lt;br&gt;(CRON JOB)" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="513" y="36" width="166" height="60" as="geometry"/>
+                <mxCell id="21" value="redis-kafka-bridge-failed&lt;br&gt;(CRON JOB)" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="478" y="31" width="166" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="HTTP" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="780" y="179" width="120" height="79" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="NATS" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="783" y="292" width="120" height="79" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

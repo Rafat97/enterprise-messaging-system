@@ -21,7 +21,7 @@ export class MessagesService {
     const requestId = headers?.[REQUEST_ID_HEADER] ?? 'NONE';
 
     const jobId =
-      `${createMessageDto.eventName}__` +
+      `${createMessageDto.driverName}__${createMessageDto.eventName}__` +
       (createMessageDto?.option?.jobId ?? `${requestId}__${uniqId}`);
 
     const options = {
@@ -32,10 +32,13 @@ export class MessagesService {
     };
 
     const data = {
+      driverName: createMessageDto.driverName,
       eventName: createMessageDto.eventName,
       message: createMessageDto.message ?? {},
+      timestamp: Date.now(),
       metaData: {
         eventType: `delayed message queued, delay = ${options.delay}ms, priority = ${options.priority}`,
+        driverName: 'kafka',
       },
     };
 
