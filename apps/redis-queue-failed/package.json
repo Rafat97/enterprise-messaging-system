@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@fanout/interface": "workspace:*",
     "@fanout/envs": "workspace:*",
     "@fanout/logger": "workspace:*",
     "@fanout/tsconfig": "workspace:*",

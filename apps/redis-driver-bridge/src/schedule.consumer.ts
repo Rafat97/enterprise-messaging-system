@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bull';
 import { SCHEDULED_QUEUE_NAME, SCHEDULED_QUEUE_PROCESS_NAME } from '@fanout/envs';
 import { ProducerFactory } from './utils/ProducerFactory';
-import { IJobQueue } from './interface/IJobQueue';
+import { IJobQueue } from '@fanout/interface';
 
 interface IScheduleConsumer {
   bridgeScheduleSend(job: Job<IJobQueue>): Promise<void>;

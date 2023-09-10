@@ -8,6 +8,7 @@ import {
 } from '@fanout/envs';
 import { Queue } from 'bull';
 import { ulid } from 'ulid';
+import { IJobQueue } from '@fanout/interface';
 
 @Injectable()
 export class MessagesService {
@@ -31,10 +32,10 @@ export class MessagesService {
       priority: createMessageDto?.option?.priority ?? 1,
     };
 
-    const data = {
+    const data: IJobQueue = {
       driverName: createMessageDto.driverName,
       eventName: createMessageDto.eventName,
-      message: createMessageDto.message ?? {},
+      message: createMessageDto.data ?? {},
       timestamp: Date.now(),
       metaData: {
         eventType: `delayed message queued, delay = ${options.delay}ms, priority = ${options.priority}`,

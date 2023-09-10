@@ -1,4 +1,4 @@
-import { IJobQueue } from '../interface/IJobQueue';
+import { IJobQueue } from '@fanout/interface';
 import { KafkaDriverInstance } from '../driver/kafka/kafka.driver';
 import { Job } from 'bull';
 

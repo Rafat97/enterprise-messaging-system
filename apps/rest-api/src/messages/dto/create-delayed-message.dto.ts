@@ -15,6 +15,8 @@ import { CreateMessageOptionsDto } from './create-message-option.dto';
 
 export enum DriverName {
   KAFKA = 'kafka',
+  // HTTP = 'http',
+  // NATS = 'nats',
 }
 
 export class CreateDelayedMessageDto {
@@ -37,7 +39,7 @@ export class CreateDelayedMessageDto {
 
   @ApiProperty({ example: { send: 'hello world' }, description: 'Give your message body' })
   @IsNotEmptyObject({ nullable: false })
-  message: { [x: string]: any };
+  data: { [x: string]: any };
 
   @ApiProperty({ example: 10, description: 'Delay in millisecond' })
   @IsNumber()
