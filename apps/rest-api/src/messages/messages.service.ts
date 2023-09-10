@@ -18,23 +18,31 @@ export class MessagesService {
     private readonly logger: Logger,
   ) {}
 
-  async create(headers: Headers, createMessageDto: CreateDelayedMessageDto) {
+  private createJobId(headers: Headers, createMessageDto: CreateDelayedMessageDto) {
     const uniqId = ulid();
     const requestId = headers?.[REQUEST_ID_HEADER] ?? 'NONE';
-    const driverConfig = getDriverConfig(createMessageDto.driverConfig);
 
     const jobId =
       `${createMessageDto.driverName}__${createMessageDto.eventName}__` +
       (createMessageDto?.option?.jobId ?? `${requestId}__${uniqId}`);
 
-    const options = {
+    return jobId;
+  }
+
+  private getBullOption(jobId: string, createMessageDto: CreateDelayedMessageDto) {
+    return {
       jobId: jobId,
       delay: createMessageDto?.delay ?? 10,
       removeOnComplete: true,
       priority: createMessageDto?.option?.priority ?? 1,
     };
+  }
 
-    const data: IJobQueue = {
+  private createBullData(headers: Headers, createMessageDto: CreateDelayedMessageDto) {
+    const jobId = this.createJobId(headers, createMessageDto);
+    const options = this.getBullOption(jobId, createMessageDto);
+    const driverConfig = getDriverConfig(createMessageDto.driverConfig);
+    const sendData: IJobQueue = {
       driverName: createMessageDto.driverName,
       driverConfig: driverConfig,
       eventName: createMessageDto.eventName,
@@ -44,6 +52,15 @@ export class MessagesService {
         eventInfo: `driver = ${createMessageDto.driverName}, delayed message queued, delay = ${options.delay}ms, priority = ${options.priority}`,
       },
     };
+    return {
+      jobId: jobId,
+      options: options,
+      data: sendData,
+    };
+  }
+
+  async create(headers: Headers, createMessageDto: CreateDelayedMessageDto) {
+    const { data, jobId, options } = this.createBullData(headers, createMessageDto);
 
     if (createMessageDto?.option?.jobId) {
       await this.isExistJobDelete(jobId);
