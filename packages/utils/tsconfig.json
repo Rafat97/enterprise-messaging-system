@@ -1,0 +1,7 @@
+{
+  "extends": "@fanout/tsconfig/lib-tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./"
+  },
+}

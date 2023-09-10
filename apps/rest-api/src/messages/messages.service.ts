@@ -9,6 +9,7 @@ import {
 import { Queue } from 'bull';
 import { ulid } from 'ulid';
 import { IJobQueue } from '@fanout/interface';
+import { getDriverConfig } from '@fanout/utils';
 
 @Injectable()
 export class MessagesService {
@@ -20,6 +21,7 @@ export class MessagesService {
   async create(headers: Headers, createMessageDto: CreateDelayedMessageDto) {
     const uniqId = ulid();
     const requestId = headers?.[REQUEST_ID_HEADER] ?? 'NONE';
+    const driverConfig = getDriverConfig(createMessageDto.driverConfig);
 
     const jobId =
       `${createMessageDto.driverName}__${createMessageDto.eventName}__` +
@@ -34,12 +36,12 @@ export class MessagesService {
 
     const data: IJobQueue = {
       driverName: createMessageDto.driverName,
+      driverConfig: driverConfig,
       eventName: createMessageDto.eventName,
       message: createMessageDto.data ?? {},
       timestamp: Date.now(),
       metaData: {
-        eventType: `delayed message queued, delay = ${options.delay}ms, priority = ${options.priority}`,
-        driverName: 'kafka',
+        eventInfo: `driver = ${createMessageDto.driverName}, delayed message queued, delay = ${options.delay}ms, priority = ${options.priority}`,
       },
     };
 

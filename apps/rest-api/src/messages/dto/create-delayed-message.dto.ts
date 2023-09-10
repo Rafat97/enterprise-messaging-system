@@ -12,6 +12,7 @@ import {
   IsEnum,
 } from 'class-validator';
 import { CreateMessageOptionsDto } from './create-message-option.dto';
+import { IDriverConfig, IDrivers } from '@fanout/interface';
 
 export enum DriverName {
   KAFKA = 'kafka',
@@ -24,7 +25,10 @@ export class CreateDelayedMessageDto {
   @IsNotEmpty()
   @IsString()
   @IsEnum(DriverName)
-  driverName: string;
+  driverName: IDrivers;
+
+  @ApiProperty({ example: null, description: 'Give the driver configuration' })
+  driverConfig: IDriverConfig;
 
   @ApiProperty({ description: 'Give event name' })
   @IsNotEmpty()

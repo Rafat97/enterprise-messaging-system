@@ -1,24 +1,42 @@
-import { CompressionTypes, Kafka, KafkaConfig, Producer, ProducerRecord } from 'kafkajs';
+import { IDriverConfig } from '@fanout/interface';
+import {
+  CompressionTypes,
+  Kafka,
+  KafkaConfig,
+  Partitioners,
+  Producer,
+  ProducerRecord,
+} from 'kafkajs';
 
 export class KafkaDriver {
   private kafkaClient: Kafka = null;
   private producer: Producer = null;
 
-  constructor() {
-    this.config();
+  constructor(driverConfig?: IDriverConfig) {
+    this.config(driverConfig);
   }
 
-  private config() {
-    const kafkaConnectionValueInString = process?.env?.KAFKA_CLIENT_CONFIG_VALUE ?? '';
+  private config(driverConfig?: IDriverConfig) {
+    let kafkaConnectionValueInString = process?.env?.KAFKA_CLIENT_CONFIG_VALUE ?? '';
+    if (driverConfig) {
+      kafkaConnectionValueInString = JSON.stringify(driverConfig);
+    }
     const kafkaConnectionValue: KafkaConfig = JSON.parse(kafkaConnectionValueInString);
     const kafka = new Kafka(kafkaConnectionValue);
     this.kafkaClient = kafka;
   }
 
   private async connect() {
-    const producer = this.kafkaClient.producer();
+    const producer = this.kafkaClient.producer({
+      allowAutoTopicCreation: true,
+      createPartitioner: Partitioners.DefaultPartitioner,
+    });
     await producer.connect();
     this.producer = producer;
+  }
+
+  private async disconnect() {
+    await this.producer.disconnect();
   }
 
   public async send(data: ProducerRecord) {
@@ -27,8 +45,7 @@ export class KafkaDriver {
       ...data,
       compression: CompressionTypes.GZIP,
     });
+    await this.disconnect();
     return recordMetadata;
   }
 }
-
-export const KafkaDriverInstance = new KafkaDriver();
