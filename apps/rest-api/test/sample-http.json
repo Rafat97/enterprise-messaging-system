@@ -1,0 +1,62 @@
+{
+  "driverName": "http",
+  "eventName": "string",
+  "option": {
+    "jobId": "string",
+    "priority": 1
+  },
+  "data": {
+    "send": "hello world"
+  },
+  "delay": 10
+}
+
+
+{
+  "driverName": "http",
+  "driverConfig": null,
+  "eventName": "string",
+  "option": {
+    "jobId": "string",
+    "priority": 1
+  },
+  "data": {
+    "send": "hello world"
+  },
+  "delay": 10
+}
+
+
+{
+  "driverName": "http",
+  "driverConfig": {},
+  "eventName": "string",
+  "option": {
+    "jobId": "string",
+    "priority": 1
+  },
+  "data": {
+    "send": "hello world"
+  },
+  "delay": 10
+}
+
+{
+  "driverName": "http",
+  "driverConfig": {
+     "url": "/post",
+     "baseURL": "https://postman-echo.com"
+   },
+  "eventName": "string",
+  "option": {
+    "jobId": "string",
+    "priority": 1
+  },
+  "data": {
+    "send": "hello world"
+  },
+  "delay": 10
+}
+
+
+

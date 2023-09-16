@@ -1,7 +1,8 @@
-import { IJobQueue, IJobQueueSendToProducer } from '@fanout/interface';
+import { DriverNameEnum, IJobQueue, IJobQueueSendToProducer } from '@fanout/interface';
 import { KafkaDriver } from '../driver/kafka/kafka.driver';
 import { Job } from 'bull';
 import { getDriverConfig } from '@fanout/utils';
+import { HttpDriver } from 'src/driver/http/http.driver';
 
 export class ProducerFactory {
   private driverName = 'kafka';
@@ -36,10 +37,20 @@ export class ProducerFactory {
     return await kafkaProducerDriver.send(data);
   }
 
+  private async httpSend(job: Job<IJobQueue>) {
+    const sendDataValue: IJobQueueSendToProducer = this.createData(job);
+    const driverConfig = getDriverConfig(job.data.driverConfig);
+    const httpProducerDriver = new HttpDriver(driverConfig);
+    return await httpProducerDriver.send(sendDataValue);
+  }
+
   async sendData(job: Job<IJobQueue>) {
     const driverName = this.driverName;
-    if (driverName == 'kafka') {
+    if (driverName == DriverNameEnum.KAFKA) {
       return await this.kafkaSend(job);
+    }
+    if (driverName === DriverNameEnum.HTTP) {
+      return await this.httpSend(job);
     } else {
       throw new Error(`${driverName} driver not supported yet.`);
     }

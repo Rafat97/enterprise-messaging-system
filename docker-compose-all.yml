@@ -101,7 +101,6 @@ services:
   #     dockerfile: ./dockerfiles/Dockerfile.PROD
   #   environment:
   #     - BUILD_FILE=apps/redis-kafka-bridge/dist/main.js
-  #     - KAFKA_BROKERS=kafka:9092
   #     - REDIS_HOST=redis
   #     - REDIS_PORT=6379
   #     - APP_PORT=3000
@@ -122,8 +121,8 @@ services:
       dockerfile: ./dockerfiles/Dockerfile.PROD
     environment:
       - BUILD_FILE=apps/redis-driver-bridge/dist/main.js
-      - KAFKA_BROKERS=kafka:9092
       - KAFKA_CLIENT_CONFIG_VALUE={"clientId":"redis-driver_kafka-bridge","brokers":["kafka:9092"]}
+      - HTTP_CLIENT_CONFIG_VALUE={"baseURL":"https://postman-echo.com", "url":"/post"} 
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - APP_PORT=3000

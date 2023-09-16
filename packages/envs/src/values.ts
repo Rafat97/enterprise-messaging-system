@@ -14,3 +14,5 @@ export const REQUEST_ID_HEADER: string = 'x-request-id';
 export const REQUEST_LOG_HEADER_ID: string = 'x-log-id';
 export const USE_JSON_LOGGER: string = 'true';
 export const DEBUG = process.env.DEBUG;
+
+export const HTTP_DRIVER_CLIENT_TIMEOUT = 10000;

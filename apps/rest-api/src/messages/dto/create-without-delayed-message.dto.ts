@@ -7,24 +7,21 @@ import {
   ValidateNested,
   Length,
   IsEnum,
+  IsOptional,
 } from 'class-validator';
 import { CreateMessageOptionsDto } from './create-message-option.dto';
-import { IDriverConfig, IDrivers } from '@fanout/interface';
-
-export enum DriverName {
-  KAFKA = 'kafka',
-  // HTTP = 'http',
-  // NATS = 'nats',
-}
+import { DriverNameEnum, IDriverConfig, IDrivers } from '@fanout/interface';
 
 export class CreateWithoutDelayedMessageDto {
   @ApiProperty({ description: 'Give the driver name', default: 'kafka' })
   @IsNotEmpty()
   @IsString()
-  @IsEnum(DriverName)
+  @IsEnum(DriverNameEnum)
   driverName: IDrivers;
 
-  @ApiProperty({ example: null, description: 'Give the driver configuration' })
+  @ApiProperty({ default: null, description: 'Give the driver configuration' })
+  @IsOptional()
+  @IsNotEmptyObject({ nullable: true })
   driverConfig: IDriverConfig;
 
   @ApiProperty({ description: 'Give event name' })
