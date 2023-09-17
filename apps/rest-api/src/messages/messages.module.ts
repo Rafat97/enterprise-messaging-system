@@ -3,6 +3,7 @@ import { MessagesService } from './messages.service';
 import { MessagesController } from './messages.controller';
 import { BullModule } from '@nestjs/bull';
 import { SCHEDULED_HTTP_QUEUE_NAME, SCHEDULED_KAFKA_QUEUE_NAME } from '@fanout/envs';
+import { ScheduleQueue } from './utils/ScheduleQueue';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { SCHEDULED_HTTP_QUEUE_NAME, SCHEDULED_KAFKA_QUEUE_NAME } from '@fanout/e
     }),
   ],
   controllers: [MessagesController],
-  providers: [MessagesService, Logger],
+  providers: [MessagesService, Logger, ScheduleQueue],
 })
 export class MessagesModule {}

@@ -4,6 +4,7 @@ import { CreateDelayedMessageDto } from './dto/create-delayed-message.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateWithoutDelayedMessageDto } from './dto/create-without-delayed-message.dto';
 import { Request } from 'express';
+import { QueueRedisRateLimit } from './guard/redisRateLimitGuard.guard';
 
 @ApiTags('messages')
 @Controller('/v1/messages')
@@ -11,6 +12,7 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Post('/delayed-message')
+  @QueueRedisRateLimit()
   createDelayedMessage(
     @Req() req: Request,
     @Body() createMessageDto: CreateDelayedMessageDto,
@@ -20,6 +22,7 @@ export class MessagesController {
   }
 
   @Post('/without-delayed-message')
+  @QueueRedisRateLimit()
   createWithoutDelayedMessage(
     @Req() req: Request,
     @Body() createMessageDto: CreateWithoutDelayedMessageDto,

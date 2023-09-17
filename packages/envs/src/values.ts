@@ -1,6 +1,9 @@
 export const SCHEDULED_QUEUE_PROCESS_NAME = 'REDIS_PROCESS';
-export const SCHEDULED_KAFKA_QUEUE_NAME = 'SCHEDULED__REDIS__KAFAK__DRIVERS';
+export const SCHEDULED_KAFKA_QUEUE_NAME = 'SCHEDULED__REDIS__KAFKA__DRIVERS';
 export const SCHEDULED_HTTP_QUEUE_NAME = 'SCHEDULED__REDIS__HTTP__DRIVERS';
+
+export const KAFKA_QUEUE_MAX_LIMIT = 100000;
+export const HTTP_QUEUE_MAX_LIMIT = 100000;
 
 //cron task delay run
 export const SCHEDULED_FAILED_RETRY_CRON = '*/30 * * * * *';
@@ -17,3 +20,5 @@ export const USE_JSON_LOGGER: string = 'true';
 export const DEBUG = process.env.DEBUG;
 
 export const HTTP_DRIVER_CLIENT_TIMEOUT = 10000;
+
+
