@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Headers, Req } from '@nestjs/common';
+import { Controller, Post, Body, Headers, Req } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateDelayedMessageDto } from './dto/create-delayed-message.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -28,13 +28,13 @@ export class MessagesController {
     return this.messagesService.createWithoutDelayedMessage(req, header, createMessageDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.messagesService.findOne(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.messagesService.findOne(id);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.messagesService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.messagesService.remove(id);
+  // }
 }

@@ -1,7 +1,7 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
-import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
+import { SCHEDULED_HTTP_QUEUE_NAME, SCHEDULED_KAFKA_QUEUE_NAME } from '@fanout/envs';
 import { RequestIdMiddleware } from './common/middleware/requestId.middleware';
 import { LoggerIdMiddleware } from '@fanout/logger';
 import { MessagesModule } from './messages/messages.module';
@@ -21,7 +21,10 @@ import { HealthModule } from './health/health.module';
       inject: [ConfigService],
     }),
     BullModule.registerQueue({
-      name: SCHEDULED_QUEUE_NAME,
+      name: SCHEDULED_KAFKA_QUEUE_NAME,
+    }),
+    BullModule.registerQueue({
+      name: SCHEDULED_HTTP_QUEUE_NAME,
     }),
     MessagesModule,
     HealthModule,

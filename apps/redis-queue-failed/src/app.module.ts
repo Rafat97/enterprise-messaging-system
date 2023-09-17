@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
-import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
+import { SCHEDULED_HTTP_QUEUE_NAME, SCHEDULED_KAFKA_QUEUE_NAME } from '@fanout/envs';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TasksService } from './task.cron';
 import { HealthModule } from './health/health.module';
+import { HttpTasksService } from './http.cron';
+import { KafkaTasksService } from './kafka.cron';
 
 @Module({
   imports: [
@@ -21,12 +22,15 @@ import { HealthModule } from './health/health.module';
       inject: [ConfigService],
     }),
     BullModule.registerQueue({
-      name: SCHEDULED_QUEUE_NAME,
+      name: SCHEDULED_KAFKA_QUEUE_NAME,
+    }),
+    BullModule.registerQueue({
+      name: SCHEDULED_HTTP_QUEUE_NAME,
     }),
     ScheduleModule.forRoot(),
     HealthModule,
   ],
   controllers: [],
-  providers: [AppService, TasksService],
+  providers: [AppService, HttpTasksService, KafkaTasksService],
 })
 export class AppModule {}

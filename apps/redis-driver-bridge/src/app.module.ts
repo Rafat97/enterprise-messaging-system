@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
-import { SCHEDULED_QUEUE_NAME } from '@fanout/envs';
-import { ScheduleConsumer } from './schedule.consumer';
+import { SCHEDULED_HTTP_QUEUE_NAME, SCHEDULED_KAFKA_QUEUE_NAME } from '@fanout/envs';
 import { HealthModule } from './health/health.module';
 import { KafkaDriver } from './driver/kafka/kafka.driver';
+import { KafkaScheduleConsumer } from './schedule/kafka.consumer';
+import { HttpScheduleConsumer } from './schedule/http.consumer';
 
 @Module({
   imports: [
@@ -21,11 +22,14 @@ import { KafkaDriver } from './driver/kafka/kafka.driver';
       inject: [ConfigService],
     }),
     BullModule.registerQueue({
-      name: SCHEDULED_QUEUE_NAME,
+      name: SCHEDULED_KAFKA_QUEUE_NAME,
+    }),
+    BullModule.registerQueue({
+      name: SCHEDULED_HTTP_QUEUE_NAME,
     }),
     HealthModule,
   ],
   controllers: [],
-  providers: [KafkaDriver, ScheduleConsumer],
+  providers: [KafkaDriver, KafkaScheduleConsumer, HttpScheduleConsumer],
 })
 export class AppModule {}

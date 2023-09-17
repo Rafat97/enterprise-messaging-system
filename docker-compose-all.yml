@@ -77,7 +77,8 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/Dockerfile.PROD
-    scale: 1
+    deploy:
+      replicas: 2
     tty: true
     environment:
       - BUILD_FILE=apps/rest-api/dist/main.js
@@ -94,26 +95,6 @@ services:
       - kafka-network
       - redis-network
 
-  # redis-kafka-bridge:
-  #   restart: always
-  #   build:
-  #     context: .
-  #     dockerfile: ./dockerfiles/Dockerfile.PROD
-  #   environment:
-  #     - BUILD_FILE=apps/redis-kafka-bridge/dist/main.js
-  #     - REDIS_HOST=redis
-  #     - REDIS_PORT=6379
-  #     - APP_PORT=3000
-  #   # ports:
-  #   #   - '3000'
-  #   scale: 2
-  #   depends_on:
-  #     - redis
-  #     - kafka
-  #   networks:
-  #     - kafka-network
-  #     - redis-network
-
   redis-driver-bridge:
     restart: always
     build:
@@ -128,7 +109,8 @@ services:
       - APP_PORT=3000
     # ports:
     #   - '3000'
-    scale: 2
+    deploy:
+      replicas: 5
     depends_on:
       - redis
       - kafka
@@ -148,7 +130,8 @@ services:
       - APP_PORT=3000
     # ports:
     #   - '3000'
-    scale: 1
+    deploy: # must me one cron job
+      replicas: 1
     depends_on:
       - redis
       - kafka

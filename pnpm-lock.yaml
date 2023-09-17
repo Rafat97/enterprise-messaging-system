@@ -467,6 +467,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@fanout/envs':
+        specifier: workspace:*
+        version: link:../envs
       '@fanout/interface':
         specifier: workspace:*
         version: link:../interface

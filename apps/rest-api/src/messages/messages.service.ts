@@ -2,21 +2,22 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateDelayedMessageDto } from './dto/create-delayed-message.dto';
 import { InjectQueue } from '@nestjs/bull';
 import {
-  SCHEDULED_QUEUE_NAME,
-  SCHEDULED_QUEUE_PROCESS_NAME,
   REQUEST_ID_HEADER,
+  SCHEDULED_HTTP_QUEUE_NAME,
+  SCHEDULED_KAFKA_QUEUE_NAME,
 } from '@fanout/envs';
 import { Queue } from 'bull';
 import { ulid } from 'ulid';
-import { IJobQueue } from '@fanout/interface';
-import { getDriverConfig } from '@fanout/utils';
+import { DriverNameEnum, IJobQueue } from '@fanout/interface';
+import { getDriverConfig, getProcessName } from '@fanout/utils';
 import { CreateWithoutDelayedMessageDto } from './dto/create-without-delayed-message.dto';
 import { Request } from 'express';
 
 @Injectable()
 export class MessagesService {
   constructor(
-    @InjectQueue(SCHEDULED_QUEUE_NAME) private readonly scheduleQueue: Queue,
+    @InjectQueue(SCHEDULED_HTTP_QUEUE_NAME) private readonly httpScheduleQueue: Queue,
+    @InjectQueue(SCHEDULED_KAFKA_QUEUE_NAME) private readonly kafkaScheduleQueue: Queue,
     private readonly logger: Logger,
   ) {}
 
@@ -32,6 +33,15 @@ export class MessagesService {
       (createMessageDto?.option?.jobId ?? `${requestId}__${uniqId}`);
 
     return jobId;
+  }
+
+  private getQueueInstance(driverName: string) {
+    if (driverName === DriverNameEnum.KAFKA) {
+      return this.kafkaScheduleQueue;
+    } else if (driverName === DriverNameEnum.HTTP) {
+      return this.httpScheduleQueue;
+    }
+    return null;
   }
 
   private getBullOption(
@@ -58,6 +68,7 @@ export class MessagesService {
     const jobId = this.createJobId(headers, createMessageDto);
     const options = this.getBullOption(jobId, createMessageDto);
     const driverConfig = getDriverConfig(createMessageDto.driverConfig);
+    const processName = getProcessName(createMessageDto.driverName);
     const currentTime = Date.now();
     const sendData: IJobQueue = {
       driverName: createMessageDto.driverName,
@@ -73,8 +84,10 @@ export class MessagesService {
     };
     return {
       jobId: jobId,
+      driverName: createMessageDto.driverName,
       options: options,
       data: sendData,
+      processName: processName,
     };
   }
 
@@ -86,6 +99,7 @@ export class MessagesService {
     const jobId = this.createJobId(headers, createMessageDto);
     const options = this.getBullOption(jobId, createMessageDto);
     const driverConfig = getDriverConfig(createMessageDto.driverConfig);
+    const processName = getProcessName(createMessageDto.driverName);
     const currentTime = Date.now();
     const sendData: IJobQueue = {
       driverName: createMessageDto.driverName,
@@ -103,6 +117,8 @@ export class MessagesService {
       jobId: jobId,
       options: options,
       data: sendData,
+      driverName: createMessageDto.driverName,
+      processName: processName,
     };
   }
 
@@ -111,14 +127,18 @@ export class MessagesService {
     headers: Headers,
     createMessageDto: CreateDelayedMessageDto,
   ) {
-    const { data, jobId, options } = this.createDelayBullData(req, headers, createMessageDto);
+    const { data, jobId, options, processName, driverName } = this.createDelayBullData(
+      req,
+      headers,
+      createMessageDto,
+    );
 
     if (createMessageDto?.option?.jobId) {
-      await this.isExistJobDelete(jobId);
+      await this.isExistJobDelete(jobId, driverName);
     }
 
     this.logger.log({ logData: { createMessageDto, data, options } }, MessagesService.name);
-    const message = await this.scheduleQueue.add(SCHEDULED_QUEUE_PROCESS_NAME, data, options);
+    const message = await this.getQueueInstance(driverName).add(processName, data, options);
     return message;
   }
 
@@ -127,41 +147,41 @@ export class MessagesService {
     headers: Headers,
     createMessageDto: CreateWithoutDelayedMessageDto,
   ) {
-    const { data, jobId, options } = this.createWithoutDelayBullData(
+    const { data, jobId, options, processName, driverName } = this.createWithoutDelayBullData(
       req,
       headers,
       createMessageDto,
     );
 
     if (createMessageDto?.option?.jobId) {
-      await this.isExistJobDelete(jobId);
+      await this.isExistJobDelete(jobId, driverName);
     }
 
     this.logger.log({ logData: { createMessageDto, data, options } }, MessagesService.name);
-    const message = await this.scheduleQueue.add(SCHEDULED_QUEUE_PROCESS_NAME, data, options);
+    const message = await this.getQueueInstance(driverName).add(processName, data, options);
     return message;
   }
 
-  async isExistJob(key: string) {
-    const job = await this.findOne(key);
+  async isExistJob(key: string, driverName: string) {
+    const job = await this.findOne(key, driverName);
     if (job) {
       return true;
     }
     return false;
   }
 
-  async isExistJobDelete(key: string) {
-    const job = await this.isExistJob(key);
+  async isExistJobDelete(key: string, driverName: string) {
+    const job = await this.isExistJob(key, driverName);
     if (job) {
-      await this.remove(key);
+      await this.remove(key, driverName);
     }
   }
 
-  async findOne(id: string) {
-    return await this.scheduleQueue.getJob(id);
+  async findOne(id: string, driverName: string) {
+    return await this.getQueueInstance(driverName).getJob(id);
   }
 
-  async remove(key: string) {
-    return await this.scheduleQueue.removeJobs(key);
+  async remove(key: string, driverName: string) {
+    return await this.getQueueInstance(driverName).removeJobs(key);
   }
 }

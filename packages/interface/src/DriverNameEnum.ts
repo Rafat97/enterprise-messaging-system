@@ -1,5 +1,5 @@
-export enum DriverNameEnum {
-  KAFKA = 'kafka',
-  HTTP = 'http',
+export const DriverNameEnum = {
+  KAFKA: 'kafka',
+  HTTP: 'http',
   // NATS = 'nats',
-}
+};
