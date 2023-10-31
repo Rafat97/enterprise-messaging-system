@@ -1,6 +1,6 @@
 # Enterprise Async Messaging System (EAMS)
 
-Enterprise Async Messaging System is made to sending different type messaging with multiple drivers like(Kafka, Redis, etc)
+Enterprise Async Messaging System is made for sending different types of messaging with multiple drivers like(Kafka, Redis, etc)
 
 # How to run
 
